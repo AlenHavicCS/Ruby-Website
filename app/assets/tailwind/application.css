@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+:root {
+  --bg-a: #1c1c1e;
+  --bg-b: #0a0a0c;
+  --text: #f2f2f2;
+  --text-muted: #cfcfcf;
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --nav-bg: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="light"] {
+  --bg-a: #faf6ee;
+  --bg-b: #f0e9db;
+  --text: #2e2a24;
+  --text-muted: #6b655a;
+  --glass-bg: rgba(0, 0, 0, 0.04);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --nav-bg: rgba(255, 252, 245, 0.6);
+}
+
+body {
+  background: radial-gradient(circle at top, var(--bg-a), var(--bg-b) 70%);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+h1 { font-size: 2.25rem; font-weight: 700; margin: 1.5rem 2rem 1rem; }
+h2 { font-size: 1.25rem; font-weight: 700; margin: 0 0 0.5rem; }
+p  { margin: 0 2rem 1rem; color: var(--text-muted); }
+a  { color: inherit; }
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 1.25rem 2rem;
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+nav ul { display: flex; gap: 2rem; list-style: none; margin: 0; padding: 0; }
+nav a { text-decoration: none; color: var(--text); font-weight: 600; }
+nav a:hover { opacity: 0.7; }
+
+#theme-toggle {
+  margin-left: auto;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  padding: 0 2rem 2rem;
+}
+
+@media (max-width: 800px) {
+  .projects-grid { grid-template-columns: 1fr; }
+}
+
+.project-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--text-muted);
+}
+
+.project-card h2.category {
+  color: #00ff0d;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.5rem;
+}
+
+.project-card .project-title a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.project-card p { margin: 0; color: var(--text-muted); }
+
+.project-card p.category.fishedex { color: #ffcb05; }
+.project-card p.category.sprout { color: #4caf50; }
+.project-card p.category.formd-t1-flipped-gpu-travel-kit { color: #e5383b; }
