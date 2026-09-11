@@ -1,0 +1,22 @@
+<div class="comment">
+  <div class="comment-avatar" aria-hidden="true"><%= comment.display_name.first.upcase %></div>
+
+  <div class="comment-content">
+    <p class="comment-line">
+      <span class="comment-author"><%= comment.display_name %></span><%= comment.body %>
+    </p>
+
+    <div class="comment-meta">
+      <span class="comment-time"><%= comment.created_at.strftime("%b %-d, %Y") %></span>
+
+      <% if authenticated? || comment_owned_by_visitor?(comment) %>
+        <%= button_to "Delete", comment_path(comment), method: :delete, class: "comment-action", data: { turbo_confirm: "Delete this comment?" } %>
+      <% end %>
+
+      <% if authenticated? %>
+        <%= button_to "Ban IP", ban_ip_comment_path(comment), method: :post, class: "comment-action comment-action-danger", data: { turbo_confirm: "Ban #{comment.ip_address} and delete this comment?" } %>
+        <span class="comment-ip">IP: <%= comment.ip_address %></span>
+      <% end %>
+    </div>
+  </div>
+</div>

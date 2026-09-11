@@ -42,6 +42,12 @@
         <li><%= link_to "Home", root_path %></li>
         <li><%= link_to "About", "/about" %></li>
         <li><%= link_to "Projects", projects_path %></li>
+        <% if authenticated? %>
+          <li><%= link_to "New Project", new_project_path %></li>
+          <li><%= button_to "Log out", session_path, method: :delete %></li>
+        <% else %>
+          <li><%= link_to "Secret", new_session_path %></li>
+        <% end %>
       </ul>
         <button id="theme-toggle" type="button">🌙</button>
 </nav>

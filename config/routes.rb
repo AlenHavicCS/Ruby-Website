@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
+  resource :session
+  resources :passwords, param: :token
   get "about", to: "pages#about"
   get "home", to: "pages#home"
-  resources :projects, only: [:index, :new, :create]
+  resources :projects, only: [:index, :new, :create, :edit], param: :slug do
+    resources :comments, only: [:create]
+  end
+  resources :comments, only: [:destroy] do
+    post :ban_ip, on: :member
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -16,6 +23,12 @@ Rails.application.routes.draw do
   root "pages#home"
 
   # Each project gets a vanity URL at the root (e.g. /fishedex) instead of /projects/:id.
+  # Update/destroy reuse the same vanity URL so form_with and project_path keep working.
   # Kept last so it doesn't shadow the named routes above.
-  get "/:slug", to: "projects#show", as: :project, constraints: { slug: /[a-z0-9]+(?:-[a-z0-9]+)*/ }
+  constraints(slug: /[a-z0-9]+(?:-[a-z0-9]+)*/) do
+    get "/:slug", to: "projects#show", as: :project
+    patch "/:slug", to: "projects#update"
+    put "/:slug", to: "projects#update"
+    delete "/:slug", to: "projects#destroy"
+  end
 end

@@ -1,4 +1,6 @@
 class Project < ApplicationRecord
+  has_many :comments, dependent: :destroy
+
   before_validation :generate_slug, if: -> { slug.blank? }
   validates :slug, uniqueness: true
 

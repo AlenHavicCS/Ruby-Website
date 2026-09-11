@@ -1,0 +1,38 @@
+<dialog id="comment-modal">
+  <div class="comment-modal-panel">
+    <h2>Add a Comment</h2>
+
+    <%= form_with model: Comment.new, url: project_comments_path(project), local: true do |form| %>
+      <div class="comment-field">
+        <%= form.label :author_name, "Your name" %>
+        <%= form.text_field :author_name, id: "comment-author-name" %>
+      </div>
+
+      <div class="comment-anonymous-field">
+        <%= check_box_tag "comment[anonymous]", "1", false, id: "comment-anonymous" %>
+        <%= label_tag "comment-anonymous", "Post anonymously" %>
+      </div>
+
+      <div class="comment-field">
+        <%= form.label :body, "Comment" %>
+        <%= form.text_area :body, required: true, rows: 3 %>
+      </div>
+
+      <div class="comment-modal-actions">
+        <button type="button" class="comment-cancel-btn" onclick="document.getElementById('comment-modal').close()">Cancel</button>
+        <%= form.submit "Post Comment" %>
+      </div>
+    <% end %>
+  </div>
+</dialog>
+
+<script>
+  (function() {
+    const anonymous = document.getElementById("comment-anonymous");
+    const authorName = document.getElementById("comment-author-name");
+    anonymous.addEventListener("change", function() {
+      authorName.disabled = anonymous.checked;
+      if (anonymous.checked) authorName.value = "";
+    });
+  })();
+</script>

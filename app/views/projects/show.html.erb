@@ -3,4 +3,24 @@
   <p><%= @project.title %></p>
   <p><%= @project.description %></p>
   <p><%= link_to "Visit Project", @project.link %></p>
+
+  <% if authenticated? %>
+    <p>
+      <%= link_to "Edit", edit_project_path(@project) %>
+      <%= button_to "Delete", project_path(@project), method: :delete, data: { turbo_confirm: "Are you sure?" } %>
+    </p>
+  <% end %>
+
+  <div class="comments-section">
+    <div class="comments-header">
+      <h2>Comments (<%= @comments.size %>)</h2>
+      <button type="button" class="add-comment-btn" onclick="document.getElementById('comment-modal').showModal()">Add Comment</button>
+    </div>
+
+    <div class="comments-list">
+      <%= render @comments %>
+    </div>
+  </div>
 </div>
+
+<%= render "comments/form", project: @project %>
