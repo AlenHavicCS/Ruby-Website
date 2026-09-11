@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get "about", to: "pages#about"
-  resources :projects, only: [:index, :show, :new, :create]
+  get "home", to: "pages#home"
+  resources :projects, only: [:index, :new, :create]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -12,5 +13,9 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root "projects#index"
+  root "pages#home"
+
+  # Each project gets a vanity URL at the root (e.g. /fishedex) instead of /projects/:id.
+  # Kept last so it doesn't shadow the named routes above.
+  get "/:slug", to: "projects#show", as: :project, constraints: { slug: /[a-z0-9]+(?:-[a-z0-9]+)*/ }
 end
