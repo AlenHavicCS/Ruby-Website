@@ -6,7 +6,7 @@
       <div class="project-card">
         <h2><%= link_to project.title, project %></h2>
           <p class="category <%= project.category.parameterize %>"><%= project.category %></p>
-          <p class="description"><%= project.description %></p>
+          <p class="description"><%= project.summary %></p>
       </div>
     <% end %>
   </div>

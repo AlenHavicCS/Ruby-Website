@@ -1,5 +1,7 @@
 class Project < ApplicationRecord
   has_many :comments, dependent: :destroy
+  has_many_attached :photos
+  has_one_attached :video
 
   before_validation :generate_slug, if: -> { slug.blank? }
   validates :slug, uniqueness: true

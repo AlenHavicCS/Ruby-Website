@@ -1,7 +1,48 @@
 <div class="container project-detail">
   <h1><%= @project.category %></h1>
   <p><%= @project.title %></p>
-  <p><%= @project.description %></p>
+
+  <%= formatted_description(@project.description) %>
+
+  <% photos = @project.photos %>
+  <% if photos.attached? || @project.video.attached? %>
+    <div class="project-media">
+      <% if photos.attached? %>
+        <div class="carousel" data-controller="carousel">
+          <div class="carousel-track" data-carousel-target="track">
+            <% photos.each do |photo| %>
+              <div class="carousel-slide">
+                <%= image_tag photo, alt: "#{@project.title} photo", data: { action: "click->carousel#openLightbox", url: url_for(photo) } %>
+              </div>
+            <% end %>
+          </div>
+
+          <% if photos.count > 1 %>
+            <button type="button" class="carousel-arrow carousel-arrow-prev" data-action="carousel#prev" aria-label="Previous photo">&#8249;</button>
+            <button type="button" class="carousel-arrow carousel-arrow-next" data-action="carousel#next" aria-label="Next photo">&#8250;</button>
+
+            <div class="carousel-dots" data-carousel-target="dots">
+              <% photos.each_with_index do |_photo, i| %>
+                <button type="button" class="carousel-dot<%= " active" if i.zero? %>" data-index="<%= i %>" data-action="carousel#goTo" aria-label="Go to photo <%= i + 1 %>"></button>
+              <% end %>
+            </div>
+          <% end %>
+
+          <dialog class="lightbox" data-carousel-target="lightbox" data-action="click->carousel#backdropClose">
+            <button type="button" class="lightbox-close" data-action="carousel#closeLightbox" aria-label="Close">&times;</button>
+            <img data-carousel-target="lightboxImage" alt="<%= @project.title %> photo, enlarged">
+          </dialog>
+        </div>
+      <% end %>
+
+      <% if @project.video.attached? %>
+        <div class="project-video">
+          <video controls preload="metadata" src="<%= url_for(@project.video) %>"></video>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
   <p><%= link_to "Visit Project", @project.link %></p>
 
   <% if authenticated? %>

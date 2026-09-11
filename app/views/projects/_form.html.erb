@@ -1,28 +1,75 @@
-<%= form_with model: project, local: true do |form| %>
-  <div>
-    <%= form.label :title %>
-    <%= form.text_field :title %>
-  </div>
+<div class="project-form-card">
+  <%= form_with model: project, local: true, html: { class: "project-form", multipart: true } do |form| %>
+    <div class="project-field">
+      <%= form.label :title %>
+      <%= form.text_field :title %>
+    </div>
 
-  <div>
-    <%= form.label :category %>
-    <%= form.text_field :category %>
-  </div>
+    <div class="project-field">
+      <%= form.label :category %>
+      <%= form.text_field :category %>
+    </div>
 
-  <div>
-    <%= form.label :description %>
-    <%= form.text_area :description %>
-  </div>
+    <div class="project-field">
+      <%= form.label :summary, "Short description (shown on the Projects grid)" %>
+      <%= form.text_area :summary, rows: 2 %>
+    </div>
 
-  <div>
-    <%= form.label :link %>
-    <%= form.url_field :link %>
-  </div>
+    <div class="project-field" data-controller="markdown-toolbar">
+      <%= form.label :description, "Full description (shown on the project's page)" %>
 
-  <div>
-    <%= form.label :image_url %>
-    <%= form.url_field :image_url %>
-  </div>
+      <div class="markdown-toolbar">
+        <button type="button" data-action="markdown-toolbar#bold" title="Bold selected text"><strong>B</strong></button>
+        <button type="button" data-action="markdown-toolbar#italic" title="Italicize selected text"><em>I</em></button>
+        <button type="button" data-action="markdown-toolbar#heading" title="Make current line a section header">H</button>
+        <span class="markdown-toolbar-divider"></span>
+        <button type="button" data-action="markdown-toolbar#alignLeft" title="Align paragraph left">Left</button>
+        <button type="button" data-action="markdown-toolbar#alignCenter" title="Center paragraph">Center</button>
+        <button type="button" data-action="markdown-toolbar#alignRight" title="Align paragraph right">Right</button>
+      </div>
 
-  <%= form.submit %>
-<% end %>
+      <%= form.text_area :description, rows: 10, data: { markdown_toolbar_target: "textarea" } %>
+      <p class="field-hint">Select text and use <strong>B</strong> / <em>I</em> for bold/italic. Start a line with "## " for a section header. The align buttons apply to the current paragraph.</p>
+    </div>
+
+    <div class="project-field">
+      <%= form.label :link %>
+      <%= form.url_field :link %>
+    </div>
+
+    <div class="project-field">
+      <%= form.label :image_url, "Cover image URL" %>
+      <%= form.url_field :image_url %>
+    </div>
+
+    <div class="project-field">
+      <%= form.label :photos, "Photo carousel" %>
+
+      <% if project.photos.attached? %>
+        <div class="media-preview">
+          <% project.photos.each do |photo| %>
+            <%= image_tag photo, class: "media-preview-thumb" %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <%= form.file_field :photos, multiple: true, accept: "image/*", direct_upload: false %>
+      <p class="field-hint">Browse and select one or more photos. Shown on the project's page as a swipeable carousel, like an Instagram post. New files are added to what's already here.</p>
+    </div>
+
+    <div class="project-field">
+      <%= form.label :video, "Video" %>
+
+      <% if project.video.attached? %>
+        <div class="media-preview">
+          <video class="media-preview-thumb" src="<%= url_for(project.video) %>" muted></video>
+        </div>
+      <% end %>
+
+      <%= form.file_field :video, accept: "video/*", direct_upload: false %>
+      <p class="field-hint">Browse and select a video file. Uploading a new one replaces the current video.</p>
+    </div>
+
+    <%= form.submit class: "project-form-submit" %>
+  <% end %>
+</div>
